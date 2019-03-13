@@ -9,9 +9,9 @@ sense = SenseHat()
 # Gets gender, name & age from api
 def addProfile():
     profile = requests.get('https://randomuser.me/api/').json()
-  
-    global gender
-    global name
+
+	global gender
+	global name
 
     gender = profile['results'][0]['gender'];
     name = profile['results'][0]['name']['first'];
@@ -25,36 +25,35 @@ def showProfile():
     sense.show_message(name);
 
 
+data = {}
+data['people'] = []
+
+
 # Add to like
 def addToLike():
-	data = { 
-		'gender': 'gender',
-		'name': 'name',
-		'choice': 'like'
-	}
 	
-	write(data)
+	data['people'].append({
+	'gender': gender,
+	'name': name,
+	'choice': 'like'
+	})
+	
+	with open(data.json, 'a') as outfile:
+		json.dump(data, outfile)
 	addProfile()
 	
 	
 # Add to dislike
 def addToDislike():
-	data = { 
-		'gender': 'gender',
-		'name': 'name',
-		'choice': 'dislike'
-	}
 	
-	write(data)
-	addProfile()
-	
-	
-# Write to data.json file
-def write(data):
-	filePathNameWEXT = './data.json'
-	with open(filePathNameWEXT, 'w') as fp:
-		json.dump(data, fp)
-		
+	data['people'].append({
+	'gender': gender,
+	'name': name,
+	'choice': 'dislike'
+	})
+	with open(data.json, 'a') as outfile:
+		json.dump(data, outfile)	
+	addProfile()	
 
 
 # Joystick control
